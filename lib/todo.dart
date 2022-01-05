@@ -11,4 +11,9 @@ class Todo {
       required this.description,
       required this.isComplete})
       : id = UniqueKey();
+
+  @override
+  String toString() {
+    return 'ToDo:\nid: $id\ntitle: $title\nisComplete: $isComplete';
+  }
 }

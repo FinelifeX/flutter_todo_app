@@ -19,24 +19,15 @@ class _TodoListScreenState extends State<TodoListScreen> {
     });
   }
 
-  void onAddTodo(BuildContext context) async {
-    final todo = await Navigator.push<Todo>(context,
-        MaterialPageRoute<Todo>(builder: (context) => const TodoScreen()));
-
-    if (todo != null) {
-      setState(() {
-        _todos.add(todo);
-      });
-    }
+  void onAddTodo(Todo todo) async {
+    setState(() {
+      _todos.add(todo);
+    });
   }
 
   void onUpdateTodo(Todo todo) async {
-    final updatedTodo = await Navigator.push<Todo>(context,
-        MaterialPageRoute<Todo>(builder: (context) => TodoScreen(todo: todo)));
-
     setState(() {
-      _todos[_todos.indexWhere((element) => todo.id == element.id)] =
-          updatedTodo!;
+      _todos[_todos.indexWhere((element) => todo.id == element.id)] = todo;
     });
   }
 
@@ -48,7 +39,8 @@ class _TodoListScreenState extends State<TodoListScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            onAddTodo(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const TodoScreen()));
           },
           child: const Icon(Icons.create_outlined),
           tooltip: 'Add new To Do item',

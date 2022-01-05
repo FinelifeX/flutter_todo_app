@@ -15,6 +15,17 @@ class TodoList extends StatelessWidget {
       : _todos = items,
         super(key: key);
 
+  void onItemPress(BuildContext context, Todo todo) async {
+    var updatedTodo = await Navigator.push<Todo>(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TodoScreen(
+                  todo: todo,
+                )));
+
+    if (updatedTodo != null) onUpdateItem(updatedTodo);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
@@ -24,18 +35,33 @@ class TodoList extends StatelessWidget {
 
           return Column(children: [
             ListTile(
-              leading: Checkbox(value: item.isComplete, onChanged: null),
-              title: Text(item.title),
-              subtitle: Text(item.description),
+              title: Text(
+                item.title,
+                style: TextStyle(
+                    decoration:
+                        item.isComplete ? TextDecoration.lineThrough : null),
+              ),
+              subtitle:
+                  item.description.isNotEmpty ? Text(item.description) : null,
+              leading: Checkbox(
+                value: item.isComplete,
+                onChanged: (value) {
+                  item.isComplete = value!;
+
+                  onUpdateItem(item);
+                },
+              ),
               trailing: TextButton(
                 child: Icon(Icons.delete_rounded, color: Colors.red.shade800),
                 onPressed: () => onRemoveItem(item.id),
               ),
               onTap: () {
-                onUpdateItem(item);
+                onItemPress(context, item);
               },
             ),
-            const Divider()
+            const Divider(
+              thickness: 1,
+            )
           ]);
         });
   }

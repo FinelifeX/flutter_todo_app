@@ -98,13 +98,21 @@ class _TodoScreenState extends State<TodoScreen> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
+                        Todo resultingTodo;
 
-                        Navigator.pop<Todo>(
-                            context,
-                            Todo(
-                                title: _title,
-                                description: _description,
-                                isComplete: _isComplete));
+                        if (widget.todo == null) {
+                          resultingTodo = Todo(
+                              title: _title,
+                              description: _description,
+                              isComplete: _isComplete);
+                        } else {
+                          resultingTodo = widget.todo!;
+                          resultingTodo.title = _title;
+                          resultingTodo.description = _description;
+                          resultingTodo.isComplete = _isComplete;
+                        }
+
+                        Navigator.pop<Todo>(context, resultingTodo);
 
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           behavior: SnackBarBehavior.floating,
