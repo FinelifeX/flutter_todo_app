@@ -53,7 +53,31 @@ class TodoList extends StatelessWidget {
               ),
               trailing: TextButton(
                 child: Icon(Icons.delete_rounded, color: Colors.red.shade800),
-                onPressed: () => onRemoveItem(item.id),
+                onPressed: () {
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Delete To Do'),
+                          content: const Text('Are you sure?'),
+                          actions: [
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('CANCEL',
+                                    style: TextStyle(color: Colors.black54))),
+                            TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                  onRemoveItem(item.id);
+                                },
+                                child: const Text('DELETE',
+                                    style: TextStyle(color: Colors.red))),
+                          ],
+                        );
+                      });
+                },
               ),
               onTap: () {
                 onItemPress(context, item);
